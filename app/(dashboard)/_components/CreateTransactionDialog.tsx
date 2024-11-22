@@ -57,27 +57,27 @@ function CreateTransactionDialog({ trigger, type }: Props) {
             transaction
           </DialogTitle>
         </DialogHeader>
+        <Form {...form}>
+          <form className="space-y-4">
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Amount</FormLabel>
+                  <FormControl>
+                    <Input defaultValue={0} type="number" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Transaction description (required)
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+            <div className="flex items-center justify-between gap-2"></div>
+          </form>
+        </Form>
       </DialogContent>
-      <Form {...form}>
-        <form className="space-y-4">
-          <FormField
-            control={form.control}
-            name="amount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Amount</FormLabel>
-                <FormControl>
-                  <Input defaultValue={0} type="number" {...field} />
-                </FormControl>
-                <FormDescription>
-                  Transaction description (required)
-                </FormDescription>
-              </FormItem>
-            )}
-          />
-          <div className="flex items-center justify-between gap-2"></div>
-        </form>
-      </Form>
     </Dialog>
   );
 }
