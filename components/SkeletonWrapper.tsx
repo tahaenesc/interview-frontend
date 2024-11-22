@@ -7,7 +7,7 @@ function SkeletonWrapper({
   isLoading,
   fullWidth = true,
 }: {
-  children: ReactNode;
+  children?: ReactNode;
   isLoading: boolean;
   fullWidth?: boolean;
 }) {
