@@ -137,7 +137,6 @@ function CreateTransactionDialog({ trigger, type }: Props) {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="amount"
@@ -153,7 +152,7 @@ function CreateTransactionDialog({ trigger, type }: Props) {
                 </FormItem>
               )}
             />
-
+            {/* eslint-disable @typescript-eslint/no-unused-vars  */}
             <div className="flex items-center justify-between gap-2">
               <FormField
                 control={form.control}
