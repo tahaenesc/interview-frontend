@@ -4,6 +4,8 @@ import React, { useMemo, useState } from "react";
 import { GetTransactionsHistoryResponseType } from "@/app/api/transactions-history/route";
 import { DateToUTCDate } from "@/lib/helpers";
 import { useQuery } from "@tanstack/react-query";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 import {
   ColumnDef,
@@ -182,6 +184,18 @@ function TransactionTable({ from, to }: Props) {
     return Array.from(uniqueCategories);
   }, [history.data]);
 
+  const exportPDF = () => {
+    const input = document.getElementById("exportContent") as HTMLElement;
+    if (input) {
+      html2canvas(input).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+        pdf.save("download.pdf");
+      });
+    }
+  };
+
   return (
     <div className="w-full">
       <div className="flex flex-wrap items-end justify-between gap-2 py-4">
@@ -224,6 +238,15 @@ function TransactionTable({ from, to }: Props) {
           >
             <DownloadIcon className="mr-2 h-4 w-4 " />
             Export CSV
+          </Button>
+          <Button
+            variant={"outline"}
+            size={"sm"}
+            className="ml-auto h-8 lg:flex"
+            onClick={exportPDF}
+          >
+            {" "}
+            <DownloadIcon className="mr-2 h-4 w-4 " /> Export PDF
           </Button>
           <DataTableViewOptions table={table} />
         </div>
