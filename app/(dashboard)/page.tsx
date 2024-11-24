@@ -6,6 +6,8 @@ import React from "react";
 import CreateTransactionDialog from "./_components/CreateTransactionDialog";
 import Overview from "./_components/Overview";
 import History from "./_components/History";
+import { DownloadIcon } from "lucide-react";
+import { jsPDF } from "jspdf";
 
 async function page() {
   const user = await currentUser();
@@ -20,6 +22,19 @@ async function page() {
 
   if (!userSettings) {
     redirect("/wizard");
+  }
+
+  function generatePDF() {
+    const doc = new jsPDF();
+
+    // PDF'e metin ekle
+    doc.text("Hello, this is your PDF content!", 10, 10);
+
+    // Örnek bir tablo veya başka içerikler eklenebilir
+    doc.text("Generated dynamically with jsPDF.", 10, 20);
+
+    // PDF'i indir
+    doc.save("example.pdf");
   }
 
   return (
@@ -50,11 +65,19 @@ async function page() {
               }
               type="expense"
             />
+            <Button
+              variant={"outline"}
+              className="border-emerald-500 bg-rose-950 text-white hover:bg-rose-700 hover:text-white"
+              onClick={generatePDF}
+            >
+              <DownloadIcon />
+              Export PDF
+            </Button>
           </div>
         </div>
       </div>
       <Overview userSettings={userSettings} />
-      <History userSettings={userSettings}/>
+      <History userSettings={userSettings} />
     </div>
   );
 }
