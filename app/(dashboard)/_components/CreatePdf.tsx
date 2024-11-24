@@ -2,38 +2,58 @@
 
 import React from "react";
 import { jsPDF } from "jspdf";
-import { Button } from "@/components/ui/button"; // Varsayılan bir Button bileşeni
+import html2canvas from "html2canvas";
+import { Button } from "@/components/ui/button";
 
-function CreatePdf() {
-  const generatePDF = () => {
-    const doc = new jsPDF();
+function PageScreenshotPdf() {
+  const handleGeneratePdf = async () => {
+    try {
+      // Mevcut ekran boyutlarını al
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
 
-    // PDF içeriğini ekle
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text("Hello! This is your dynamically generated PDF.", 10, 20);
+      // Tüm sayfanın ekran görüntüsünü almak
+      const canvas = await html2canvas(document.body, {
+        width: screenWidth,
+        height: screenHeight,
+      });
+      const imgData = canvas.toDataURL("image/png");
 
-    doc.setFont("normal");
-    doc.setFontSize(14);
-    doc.text("Generated using React and jsPDF.", 10, 30);
+      // jsPDF ayarları (ekran boyutlarına göre)
+      const pdf = new jsPDF({
+        orientation: screenWidth > screenHeight ? "landscape" : "portrait", // Yatay veya dikey PDF
+        unit: "px",
+        format: [screenWidth, screenHeight], // Dinamik ekran boyutları
+      });
 
-    // Örnek tablo
-    doc.text("Sample Table:", 10, 50);
+      const pdfWidth = screenWidth;
+      const pdfHeight = screenHeight;
 
-    // PDF'i indir
-    doc.save("example.pdf");
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+
+      // Görüntüyü PDF'ye tam olarak sığdır
+      const scaledWidth = pdfWidth;
+      const scaledHeight = (imgHeight * scaledWidth) / imgWidth;
+
+      // Görüntüyü PDF'ye ekle
+      pdf.addImage(imgData, "PNG", 0, 0, scaledWidth, scaledHeight);
+      pdf.save("PageScreenshot.pdf");
+    } catch (error) {
+      console.error("PDF oluşturulurken hata oluştu:", error);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
+    <div className="p-4">
       <Button
-        onClick={generatePDF}
+        onClick={handleGeneratePdf}
         className="bg-blue-500 text-white hover:bg-blue-600"
       >
-        Create PDF
+        PDF Oluştur
       </Button>
     </div>
   );
 }
 
-export default CreatePdf;
+export default PageScreenshotPdf;

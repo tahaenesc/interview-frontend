@@ -39,7 +39,7 @@ function TransactionsPage() {
         </div>
       </div>
       <div className="px-8">
-        <TransactionTable from={dateRange.from} to={dateRange.to}  />
+        <TransactionTable from={dateRange.from} to={dateRange.to} />
       </div>
     </>
   );
