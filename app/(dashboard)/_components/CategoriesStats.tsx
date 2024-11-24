@@ -96,16 +96,16 @@ function CategoriesCard({
                 return (
                   <div key={item.category} className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
-                      <span className="flex items-center text-gray-400">
+                      <span className="flex items-center text-gray-400 gap-12">
                         {item.categoryIcon} {item.category}
                         <span className="ml-2 text-xs text-muted-foreground">
                           ({percentage.toFixed(0)}%)
                         </span>
                         {percentage > 80 && (
-                          <>
+                          <div className="flex items-center gap-3">
                             <OctagonAlert className="ml-2 text-red-500" />
                             <span>you've been use % 80 of {item.category}</span>
-                          </>
+                          </div>
                         )}
                       </span>
 
