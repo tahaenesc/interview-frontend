@@ -6,6 +6,7 @@ import React from "react";
 import CreateTransactionDialog from "./_components/CreateTransactionDialog";
 import Overview from "./_components/Overview";
 import History from "./_components/History";
+import CreatePdf from "./_components/CreatePdf";
 
 async function page() {
   const user = await currentUser();
@@ -50,6 +51,7 @@ async function page() {
               }
               type="expense"
             />
+            <CreatePdf />
           </div>
         </div>
       </div>
