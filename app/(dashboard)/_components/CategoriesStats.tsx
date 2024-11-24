@@ -9,6 +9,7 @@ import { DateToUTCDate, GetFormatterForCurrency } from "@/lib/helpers";
 import { TransactionType } from "@/lib/types";
 import { UserSettings } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+import { OctagonAlert } from "lucide-react";
 import React, { useMemo } from "react";
 
 interface Props {
@@ -100,6 +101,12 @@ function CategoriesCard({
                         <span className="ml-2 text-xs text-muted-foreground">
                           ({percentage.toFixed(0)}%)
                         </span>
+                        {percentage > 80 && (
+                          <>
+                            <OctagonAlert className="ml-2 text-red-500" />
+                            <span>you've been use % 80 of {item.category}</span>
+                          </>
+                        )}
                       </span>
 
                       <span className="text-sm text-gray-400">
