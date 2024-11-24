@@ -6,6 +6,7 @@ import { DateToUTCDate } from "@/lib/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import html2pdf from "html2pdf.js";
 
 import {
   ColumnDef,
@@ -196,8 +197,13 @@ function TransactionTable({ from, to }: Props) {
     }
   };
 
+  async function handleOnclick() {
+    const element = document.querySelector("invoice");
+    html2pdf(element);
+  }
+
   return (
-    <div className="w-full">
+    <div className="invoice w-full">
       <div className="flex flex-wrap items-end justify-between gap-2 py-4">
         <div className="flex gap-2 ">
           {table.getColumn("category") && (
@@ -243,7 +249,7 @@ function TransactionTable({ from, to }: Props) {
             variant={"outline"}
             size={"sm"}
             className="ml-auto h-8 lg:flex"
-            onClick={exportPDF}
+            onClick={handleOnclick}
           >
             {" "}
             <DownloadIcon className="mr-2 h-4 w-4 " /> Export PDF
