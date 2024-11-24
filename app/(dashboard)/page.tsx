@@ -51,7 +51,7 @@ async function page() {
               }
               type="expense"
             />
-            <CreatePdf />
+            {/* <CreatePdf /> */}
           </div>
         </div>
       </div>
