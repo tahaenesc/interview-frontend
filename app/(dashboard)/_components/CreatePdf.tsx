@@ -50,7 +50,7 @@ function PageScreenshotPdf() {
         onClick={handleGeneratePdf}
         className="bg-blue-500 text-white hover:bg-blue-600"
       >
-        PDF Oluştur
+        Export PDF
       </Button>
     </div>
   );
