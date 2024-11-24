@@ -8,12 +8,16 @@ import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { TransactionType } from "@/lib/types";
 
 interface Props {
   trigger: ReactNode;
@@ -51,6 +55,22 @@ function DeleteCategoryDialog({ category, trigger }: Props) {
             category
           </AlertDialogDescription>
         </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => {
+              toast.loading("Deleting category...", {
+                id: categoryIdentifier,
+              });
+              deleteMutation.mutate({
+                name: category.name,
+                type: category.type as TransactionType,
+              });
+            }}
+          >
+            Continue
+          </AlertDialogAction>
+        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
