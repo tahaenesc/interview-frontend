@@ -152,12 +152,12 @@ function CreateTransactionDialog({ trigger, type }: Props) {
                 </FormItem>
               )}
             />
-            {/* eslint-disable @typescript-eslint/no-unused-vars  */}
+
             <div className="flex items-center justify-between gap-2">
               <FormField
                 control={form.control}
                 name="category"
-                render={({ field }) => (
+                render={({}) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Category</FormLabel>
                     <FormControl>

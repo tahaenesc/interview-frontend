@@ -53,7 +53,6 @@ function CategoriesStats({ userSettings, from, to }: Props) {
 }
 
 export default CategoriesStats;
-/* eslint-disable @typescript-eslint/no-unused-vars */
 function CategoriesCard({
   data,
   type,

@@ -17,7 +17,7 @@ import { DeleteTransaction } from "../_actions/deleteTransaction";
 
 interface Props {
   open: boolean;
-  SetOpen: (open: boolean) => void;
+  setOpen: (open: boolean) => void;
   transactionId: string;
 }
 
