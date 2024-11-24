@@ -49,6 +49,13 @@ function CategoriesStats({ userSettings, from, to }: Props) {
           data={statsQuery.data || []}
         />
       </SkeletonWrapper>
+      <SkeletonWrapper isLoading={statsQuery.isFetching}>
+        <CategoriesCard
+          formatter={formatter}
+          type="expense"
+          data={statsQuery.data || []}
+        />
+      </SkeletonWrapper>
     </div>
   );
 }
@@ -73,7 +80,12 @@ function CategoriesCard({
     <Card className="h-80 w-full">
       <CardHeader>
         <CardTitle className="grid grid-flow-row justify-between gap-2 text-muted-foreground md:grid-flow-col">
-          {type === "income" ? "Incomes" : "Expenses"} by category
+          {type === "income"
+            ? "Incomes"
+            : type === "expense"
+            ? "Expenses"
+            : "Balance"}{" "}
+          by category
         </CardTitle>
       </CardHeader>
       <div className="flex items-center justify-between gap-2">
@@ -101,12 +113,6 @@ function CategoriesCard({
                         <span className="ml-2 text-xs text-muted-foreground">
                           ({percentage.toFixed(0)}%)
                         </span>
-                        {percentage > 80 && (
-                          <div className="flex items-center gap-3">
-                            <OctagonAlert className="ml-2 text-red-500" />
-                            <span>you've been use % 80 of {item.category}</span>
-                          </div>
-                        )}
                       </span>
 
                       <span className="text-sm text-gray-400">
