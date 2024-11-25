@@ -10,7 +10,19 @@ import { TransactionType } from "@/lib/types";
 import { UserSettings } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { OctagonAlert } from "lucide-react";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   userSettings: UserSettings;
@@ -33,8 +45,36 @@ function CategoriesStats({ userSettings, from, to }: Props) {
     return GetFormatterForCurrency(userSettings.currency);
   }, [userSettings.currency]);
 
+  const incomeData =
+    statsQuery.data?.filter((el) => el.type === "income") || [];
+  const expenseData =
+    statsQuery.data?.filter((el) => el.type === "expense") || [];
+
+  const totalIncome = incomeData.reduce(
+    (acc, el) => acc + (el._sum?.amount || 0),
+    0
+  );
+  const totalExpense = expenseData.reduce(
+    (acc, el) => acc + (el._sum?.amount || 0),
+    0
+  );
+  const balance = totalIncome - totalExpense;
+
+  // State to toggle visibility of the message and icon
+  const [showWarning, setShowWarning] = useState(false);
+
+  // Show warning if balance is less than 20% of total income
+  React.useEffect(() => {
+    if (balance < totalIncome * 0.2) {
+      setShowWarning(true);
+    } else {
+      setShowWarning(false);
+    }
+  }, [balance, totalIncome]);
+
   return (
     <div className="flex w-full flex-wrap gap-2 md:flex-nowrap">
+      {/* Income, Expense, and Balance Cards */}
       <SkeletonWrapper isLoading={statsQuery.isFetching}>
         <CategoriesCard
           formatter={formatter}
@@ -49,11 +89,51 @@ function CategoriesStats({ userSettings, from, to }: Props) {
           data={statsQuery.data || []}
         />
       </SkeletonWrapper>
+      <SkeletonWrapper isLoading={statsQuery.isFetching}>
+        <Card className="h-80 w-full">
+          <CardHeader>
+            <CardTitle className="grid grid-flow-row justify-between gap-2 text-muted-foreground md:grid-flow-col">
+              Balance
+            </CardTitle>
+          </CardHeader>
+          <div className="flex items-center justify-between gap-2 p-4">
+            <span className="text-xl font-semibold">
+              {formatter.format(balance)}
+            </span>
+            {showWarning && (
+              <div className="flex items-center gap-2">
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline">
+                      <OctagonAlert className="text-red-500" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription className="uppercase text-red-500 text-3xl">
+                        you've been use % 80 of limit
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            )}
+          </div>
+        </Card>
+      </SkeletonWrapper>
     </div>
   );
 }
 
 export default CategoriesStats;
+
 function CategoriesCard({
   data,
   type,
